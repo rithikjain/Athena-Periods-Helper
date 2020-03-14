@@ -3,6 +3,7 @@ package com.dscvit.periodsapp.ui.chat
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dscvit.periodsapp.R
@@ -45,6 +46,11 @@ class ChatActivity : AppCompatActivity() {
         val authKey = sharedPref.getString(Constants.PREF_AUTH_KEY, "")
 
         chatToolbar.title = receiverName
+        setSupportActionBar(chatToolbar)
+        chatToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_back)
+        chatToolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.stackFromEnd = true
