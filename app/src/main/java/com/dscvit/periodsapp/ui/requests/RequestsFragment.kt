@@ -64,8 +64,6 @@ class RequestsFragment : Fragment() {
             )
         }
 
-        //getLocationAndUpdateDb()
-
         val lat = sharedPrefs.getFloat(Constants.PREF_CURR_LAT, 0f).toDouble()
         val lon = sharedPrefs.getFloat(Constants.PREF_CURR_LON, 0f).toDouble()
 
@@ -83,6 +81,11 @@ class RequestsFragment : Fragment() {
             requestsList = it
             requestListAdapter.updateRequests(it)
         })
+
+        requestsRefresh.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        requestsRefresh.setOnRefreshListener {
+            makeNetworkCallUpdateDb(lat, lon)
+        }
 
         val client = OkHttpClient()
         val wsListener: ChatWsListener by inject()
@@ -129,35 +132,6 @@ class RequestsFragment : Fragment() {
             }
         })
     }
-
-    /*
-    @SuppressWarnings("MissingPermission")
-    private fun getLocationAndUpdateDb() {
-        val locationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, object :
-            LocationListener {
-            override fun onLocationChanged(location: Location?) {
-                if (location != null) {
-                    val lat = location.latitude
-                    val lon = location.longitude
-
-                    makeNetworkCallUpdateDb(lat, lon)
-                }
-            }
-
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-
-            override fun onProviderEnabled(provider: String?) {}
-
-            override fun onProviderDisabled(provider: String?) {
-                requireContext().shortToast("Turn on Location")
-            }
-        }, Looper.getMainLooper())
-    }
-     */
-
     private fun makeNetworkCallUpdateDb(lat: Double, lon: Double) {
         requestsViewModel.getAlerts().observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -177,11 +151,13 @@ class RequestsFragment : Fragment() {
                                 requestsViewModel.upsertRequest(request)
                             }
                         }
+                        requestsRefresh.isRefreshing = false
                     }
                 }
                 Result.Status.ERROR -> {
                     requireContext().shortToast("Error in getting alerts")
                     Log.d("esh", it.message)
+                    requestsRefresh.isRefreshing = false
                 }
             }
         })

@@ -82,6 +82,30 @@ class ChatsFragment : Fragment() {
             }
         })
 
+        chatsRefresh.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        chatsRefresh.setOnRefreshListener {
+            chatViewModel.viewChatRooms().observe(viewLifecycleOwner, Observer {
+                when (it.status) {
+                    Result.Status.LOADING -> {
+                    }
+                    Result.Status.SUCCESS -> {
+                        chatRooms = it.data!!
+
+                        chatsRefresh.isRefreshing = false
+                    }
+                    Result.Status.ERROR -> {
+                        Log.d("esh", it.message)
+                        if (it.message == "Network called failed with message HTTP 204 had non-zero Content-Length: 37") {
+                            requireContext().shortToast("No Chats Available")
+                        } else {
+                            requireContext().shortToast("Cant get chats (Check internet)")
+                        }
+                        chatsRefresh.isRefreshing = false
+                    }
+                }
+            })
+        }
+
         chatRoomRecyclerView.addOnItemClickListener(object : OnItemClickListener {
             var receiverId = 0
             var receiverName = ""

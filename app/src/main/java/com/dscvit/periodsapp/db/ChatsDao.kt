@@ -1,7 +1,10 @@
 package com.dscvit.periodsapp.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.dscvit.periodsapp.model.chat.ChatRoom
 import com.dscvit.periodsapp.model.chat.Message
 import com.dscvit.periodsapp.model.requests.Request
@@ -17,7 +20,7 @@ interface ChatsDao {
     @Query("SELECT * FROM requests WHERE isDone=0 ORDER BY id DESC")
     fun getAllRequests(): LiveData<List<Request>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChatRooms(chatRooms: List<ChatRoom>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -21,5 +21,9 @@ data class ChatRoom(
     @SerializedName("participant2_id")
     val participant2Id: Int,
     @SerializedName("participant2_username")
-    val participant2Username: String
+    val participant2Username: String,
+    @SerializedName("last_message_body")
+    val lastMessageBody: String,
+    @SerializedName("last_message_sender")
+    val lastMessageSender: Int
 )

@@ -40,9 +40,11 @@ class ChatListAdapter(context: Context) : RecyclerView.Adapter<ChatListAdapter.C
 
     class ChatViewHolder(view: View, private val userId: Int) : RecyclerView.ViewHolder(view) {
         private val titleTextView = view.titleTextView
+        private val messageTextView = view.messageTextView
 
         fun bind(chat: ChatRoom) {
             val username: String
+            val youOrOther: String
 
             if (userId == chat.participant1Id) {
                 username = chat.participant2Username
@@ -50,6 +52,13 @@ class ChatListAdapter(context: Context) : RecyclerView.Adapter<ChatListAdapter.C
                 username = chat.participant1Username
             }
 
+            if (userId == chat.lastMessageSender) {
+                youOrOther = "You:"
+            } else {
+                youOrOther = "$username:"
+            }
+
+            messageTextView.text = "$youOrOther ${chat.lastMessageBody}"
             titleTextView.text = username
         }
     }
