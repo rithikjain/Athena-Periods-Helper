@@ -17,17 +17,24 @@ object CustomMessageNotification {
 
     private const val CHANNEL_ID = "com.dscvit.periodsapp.CHANNEL_ID"
     private const val NOTIFICATION_TAG = "FCM_HELP"
-    private const val GROUP_NOTIFICATION = "com.dscvit.periodsapp.GROUP_NOTIFICATION"
     private var mId = 0
 
-    fun notify(context: Context, name: String, msg: String, receiverId: Int, id: Int) {
+    fun notify(
+        context: Context,
+        name: String,
+        title: String,
+        msg: String,
+        receiverId: Int,
+        chatRoomId: Int,
+        id: Int
+    ) {
 
         mId = id
 
-        val title = "New Message From $name"
-
         val intent = Intent(context, ChatActivity::class.java)
+        intent.putExtra(Constants.EXTRA_CHAT_ROOM_ID, chatRoomId)
         intent.putExtra(Constants.EXTRA_RECEIVER_ID, receiverId)
+        intent.putExtra(Constants.EXTRA_RECEIVER_NAME, name)
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
 
@@ -39,8 +46,6 @@ object CustomMessageNotification {
             .setContentText(msg)
 
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-            .setGroup(GROUP_NOTIFICATION)
 
             .setContentIntent(
                 PendingIntent.getActivity(
@@ -59,24 +64,14 @@ object CustomMessageNotification {
 
             .setAutoCancel(true)
 
-        val summaryNotification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText("Messages")
-            .setSmallIcon(R.drawable.ic_lightdrop)
-            .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setGroup(GROUP_NOTIFICATION)
-            .setGroupSummary(true)
-
-        notify(context, builder.build(), summaryNotification.build())
+        notify(context, builder.build())
 
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private fun notify(
         context: Context,
-        notification: Notification,
-        summaryNotification: Notification
+        notification: Notification
     ) {
         val nm = context
             .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -87,7 +82,6 @@ object CustomMessageNotification {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nm.notify(NOTIFICATION_TAG, mId, notification)
-            nm.notify(0, summaryNotification)
         } else {
             nm.notify(NOTIFICATION_TAG.hashCode(), notification)
         }

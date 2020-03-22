@@ -33,6 +33,7 @@
         <activity
             android:name=".ui.chat.ChatActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.PostAuthActivity"
@@ -48,7 +49,7 @@
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

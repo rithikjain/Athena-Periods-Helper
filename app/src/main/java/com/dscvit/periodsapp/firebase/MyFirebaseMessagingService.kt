@@ -29,25 +29,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 userId!!.toInt(),
                 userName!!
             )
-        }
-
-        /*
-        if(!remoteMessage.data["sender_name"].isNullOrEmpty()) {
+        } else if (!remoteMessage.data["sender_name"].isNullOrEmpty()) {
             val id = (Date().time / 1000L % Int.MAX_VALUE).toInt()
             val name = remoteMessage.data["sender_name"]
+            val title = remoteMessage.data["title"]
             val message = remoteMessage.data["body"]
             val senderId = remoteMessage.data["sender_id"]
-            val receiverId = remoteMessage.data["receiver_id"]
+            val chatRoomId = remoteMessage.data["chat_room_id"]
 
             CustomMessageNotification.notify(
                 App.context,
                 name!!,
+                title!!,
                 message!!,
                 senderId!!.toInt(),
+                chatRoomId!!.toInt(),
                 id
             )
         }
-         */
 
         Log.d("esh", "FCM Received")
     }

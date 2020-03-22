@@ -11,7 +11,7 @@ import com.dscvit.periodsapp.model.requests.Request
 
 @Dao
 interface ChatsDao {
-    @Query("SELECT * FROM chatrooms")
+    @Query("SELECT * FROM chatrooms ORDER BY lastMessageTime Desc")
     fun getAllChatRooms(): LiveData<List<ChatRoom>>
 
     @Query("SELECT * FROM messages WHERE chatRoomId = :chatId")

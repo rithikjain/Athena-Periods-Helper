@@ -19,7 +19,6 @@ object CustomLocationNotification {
 
     private const val CHANNEL_ID = "com.dscvit.periodsapp.CHANNEL_ID"
     private const val NOTIFICATION_TAG = "FCM_HELP"
-    private const val GROUP_NOTIFICATION = "com.dscvit.periodsapp.GROUP_NOTIFICATION"
     private var mId = 0
 
     fun notify(context: Context, text: String, id: Int, receiverId: Int, userName: String) {
@@ -50,8 +49,6 @@ object CustomLocationNotification {
 
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-            .setGroup(GROUP_NOTIFICATION)
-
             .setContentIntent(pendingIntent)
 
 //            .setContentIntent(
@@ -71,24 +68,14 @@ object CustomLocationNotification {
 
             .setAutoCancel(true)
 
-        val summaryNotification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText("Help Requests")
-            .setSmallIcon(R.drawable.ic_lightdrop)
-            .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setGroup(GROUP_NOTIFICATION)
-            .setGroupSummary(true)
-
-        notify(context, builder.build(), summaryNotification.build())
+        notify(context, builder.build())
 
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private fun notify(
         context: Context,
-        notification: Notification,
-        summaryNotification: Notification
+        notification: Notification
     ) {
         val nm = context
             .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -99,7 +86,6 @@ object CustomLocationNotification {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nm.notify(NOTIFICATION_TAG, mId, notification)
-            nm.notify(0, summaryNotification)
         } else {
             nm.notify(NOTIFICATION_TAG.hashCode(), notification)
         }
