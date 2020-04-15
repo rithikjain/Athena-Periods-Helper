@@ -50,7 +50,7 @@ class DetailsFragment : Fragment() {
 
         sharedPreferences = PreferenceHelper.customPrefs(requireContext(), Constants.PREF_NAME)
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {}
+        //requireActivity().onBackPressedDispatcher.addCallback(this) {}
 
         finishButton.setOnClickListener {
             val email = emailEditText.text.toString()

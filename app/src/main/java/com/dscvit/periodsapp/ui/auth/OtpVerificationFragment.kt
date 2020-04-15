@@ -30,7 +30,7 @@ class OtpVerificationFragment : Fragment() {
 
         otpMessageTextView.text = "Please enter the OTP"
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {}
+        //requireActivity().onBackPressedDispatcher.addCallback(this) {}
 
         verifyButton.setOnClickListener {
             if (otpEditText.text.length == 6) {
